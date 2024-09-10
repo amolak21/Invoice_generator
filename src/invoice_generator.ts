@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import Handlebars from "handlebars";
 import * as pdf from "html-pdf";
+import path from "path";
 interface Item {
   description: string;
   unitPrice: number;
@@ -8,6 +9,9 @@ interface Item {
   discount: number;
   netAmount: number;
   taxType: string;
+  cgstAmount: number;
+  sgstAmount: number;
+  igstAmount: number;
   taxAmount: number;
   totalAmount: number;
 }
@@ -54,15 +58,19 @@ export interface InvoiceData {
 
 export function generateInvoice(data: InvoiceData): Promise<void> {
   return new Promise((resolve, reject) => {
-    const taxType =
-      data.placeOfSupply === data.placeOfDelivery ? "CGST" : "IGST";
-    const taxRate = taxType == "CGST" ? 9 : 18;
-
     for (const item of data.itemDetails) {
       item.netAmount = item.unitPrice * item.quantity - item.discount;
-      item.taxType = taxType;
-      item.taxAmount = (item.netAmount * taxRate) / 100;
-      item.totalAmount = item.netAmount + item.taxAmount;
+
+      if (data.placeOfSupply === data.placeOfDelivery) {
+        item.cgstAmount = (item.netAmount * 9) / 100;
+        item.sgstAmount = (item.netAmount * 9) / 100;
+        item.taxAmount = item.cgstAmount + item.sgstAmount;
+        item.taxType = "CGST + SGST";
+      } else {
+        item.igstAmount = (item.netAmount * 18) / 100;
+        item.taxAmount = item.igstAmount;
+        item.taxType = "IGST";
+      }
     }
     const totalNetAmount = data.itemDetails.reduce(
       (acc, item) => acc + item.netAmount,
@@ -74,6 +82,10 @@ export function generateInvoice(data: InvoiceData): Promise<void> {
     );
     const totalAmount = totalNetAmount + totalTaxAmount;
 
+    const logoPath = path.resolve("./public/image.png");
+    const logoBase64 = fs.readFileSync(logoPath, "base64");
+    const logoDataUri = `data:image/png;base64,${logoBase64}`;
+
     const templateSource = fs.readFileSync(
       "src/templates/invoice_template.hbs",
       "utf8"
@@ -84,13 +96,13 @@ export function generateInvoice(data: InvoiceData): Promise<void> {
       totalNetAmount,
       totalTaxAmount,
       totalAmount,
+      logoDataUri,
     });
 
     pdf
       .create(html, {
         format: "A4",
         border: {
-          top: "20mm",
           bottom: "20mm",
           left: "20mm",
           right: "20mm",

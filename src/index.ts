@@ -44,9 +44,12 @@ const sampleData: InvoiceData = {
       quantity: 2,
       discount: 10,
       netAmount: 190, // calculated as unitPrice * quantity - discount
-      taxType: "CGST", // or 'IGST' depending on place of supply and delivery
-      taxAmount: 34.2, // calculated as netAmount * taxRate / 100
-      totalAmount: 224.2, // calculated as netAmount + taxAmount
+      taxType: "CGST + SGST",
+      cgstAmount: 17.1, // calculated as netAmount * 9 / 100
+      sgstAmount: 17.1, // calculated as netAmount * 9 / 100
+      igstAmount: 0,
+      taxAmount: 34.2, // total taxAmount = cgstAmount + sgstAmount
+      totalAmount: 224.2,
     },
     {
       description: "Widget B",
@@ -54,9 +57,12 @@ const sampleData: InvoiceData = {
       quantity: 1,
       discount: 20,
       netAmount: 180, // calculated as unitPrice * quantity - discount
-      taxType: "CGST", // or 'IGST' depending on place of supply and delivery
-      taxAmount: 32.4, // calculated as netAmount * taxRate / 100
-      totalAmount: 212.4, // calculated as netAmount + taxAmount
+      taxType: "CGST + SGST",
+      cgstAmount: 16.2, // calculated as netAmount * 9 / 100
+      sgstAmount: 16.2, // calculated as netAmount * 9 / 100
+      igstAmount: 0,
+      taxAmount: 32.4, // total taxAmount = cgstAmount + sgstAmount
+      totalAmount: 212.4,
     },
   ],
 };

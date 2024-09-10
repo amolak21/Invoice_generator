@@ -3,90 +3,136 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoice</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-      }
-      .container {
-        padding: 20px;
-      }
-      .header {
-        text-align: right;
-        margin-bottom: 20px;
-      }
-      .header img {
-        float: left;
-        max-width: 150px;
-        margin: 0;
-      }
-      h1 {
-        font-size: 20px;
-        text-transform: uppercase;
-        margin: 0;
-        margin-bottom: 10px;
-      }
-      .details-section {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-      }
-      .details-section div {
-        width: 48%;
-      }
-      .details-section p {
-        margin: 2px 0;
-      }
-      .details-section p strong {
-        display: inline-block;
-        min-width: 140px;
-      }
-      .order-details {
-        margin-bottom: 20px;
-      }
-      .order-details p {
-        margin: 2px 0;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-      }
-      table,
-      th,
-      td {
-        border: 1px solid #ddd;
-      }
-      th,
-      td {
-        padding: 8px;
-        text-align: left;
-      }
-      th {
-        background-color: #f2f2f2;
-      }
-      .totals {
-        text-align: right;
-        margin-bottom: 20px;
-      }
-      .footer {
-        margin-top: 20px;
-      }
-      .footer p {
-        margin: 5px 0;
-      }
-      .authorized-signatory {
-        text-align: right;
-      }
-    </style>
+   <style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #f9f9f9;
+  }
+
+  .container {
+    padding: 20px;
+    background-color: white;
+    margin: 0 auto;
+    max-width: 800px;
+  }
+
+  .header {
+    margin-bottom: 20px;
+    text-align: right;
+  }
+
+  .header img {
+    float: left;
+    max-width: 200px;
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .header p {
+    margin: 0;
+    font-size: 14px;
+    color: #777;
+  }
+
+  .details-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .details-section div {
+    width: 48%;
+  }
+
+  .details-section p {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+
+  .details-section p strong {
+     color: #000;
+    font-weight: bold;
+  }
+
+  .order-details p {
+    font-size: 14px;
+    margin: 4px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+
+  td {
+    color: #555;
+  }
+
+  .totals {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+
+  .totals p {
+    font-size: 14px;
+    color: #333;
+    margin: 4px 0;
+  }
+
+  .totals strong {
+    color: #000;
+  }
+
+  .footer {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+  }
+
+  .footer p {
+    font-size: 12px;
+    color: #777;
+    margin: 5px 0;
+  }
+
+  .authorized-signatory {
+    text-align: right;
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+  }
+</style>
+
   </head>
   <body>
     <div class="container">
       <!-- Header Section -->
       <div class="header">
-        <img src="amazon-logo.png" alt="Company Logo" />
+   <img src="{{logoDataUri}}" alt="Company Logo" />
+
         <h1>Tax Invoice / Bill of Supply / Cash Memo</h1>
         <p>(Original for Recipient)</p>
       </div>
@@ -94,72 +140,45 @@
       <!-- Seller, Billing, and Shipping Details -->
       <div class="details-section">
         <div class="seller-details">
-          <p>
-            <strong>Sold By:</strong><br />
-            {{ data.sellerDetails.name }}
-          </p>
-          <p>{{ data.sellerDetails.address }}, {{ data.sellerDetails.city }}</p>
-          <p>
-            {{ data.sellerDetails.state }}, {{ data.sellerDetails.pincode }}
-          </p>
+          <p><strong>Sold By:</strong><br/> {{data.sellerDetails.name}}</p>
+          <p>{{data.sellerDetails.address}}, {{data.sellerDetails.city}}</p>
+          <p>{{data.sellerDetails.state}}, {{data.sellerDetails.pincode}}</p>
           <p>IN</p>
-          <p><strong>PAN No:</strong> {{ data.sellerDetails.panNo }}</p>
-          <p>
-            <strong>GST Registration No:</strong>
-            {{ data.sellerDetails.gstRegistrationNo }}
-          </p>
+          </div>
+        <div class="gov-details">
+          <p><strong>PAN No:</strong> {{data.sellerDetails.panNo}}</p>
+          <p><strong>GST Registration No:</strong> {{data.sellerDetails.gstRegistrationNo}} </p>       
         </div>
-        <div class="billing-details">
-          <p>
-            <strong>Billing Address:</strong> {{ data.billingDetails.name }}
-          </p>
-          <p>
-            {{ data.billingDetails.address }}, {{ data.billingDetails.city }}
-          </p>
-          <p>
-            {{ data.billingDetails.state }}, {{ data.billingDetails.pincode }}
-          </p>
-          <p>IN</p>
-          <p>
-            <strong>State/UT Code:</strong>
-            {{ data.billingDetails.stateUTCode }}
-          </p>
-        </div>
+
       </div>
+        <div class="billing-details">
+          <p><strong>Billing Address:</strong> {{data.billingDetails.name}}</p>
+          <p>{{data.billingDetails.address}}, {{data.billingDetails.city}}</p>
+          <p>{{data.billingDetails.state}}, {{data.billingDetails.pincode}}</p>
+          <p>IN</p>
+          <p><strong>State/UT Code:</strong> {{data.billingDetails.stateUTCode}}</p>
+        </div>
 
       <div class="details-section">
         <div class="shipping-details">
-          <p>
-            <strong>Shipping Address:</strong> {{ data.shippingDetails.name }}
-          </p>
-          <p>
-            {{ data.shippingDetails.address }}, {{ data.shippingDetails.city }}
-          </p>
-          <p>
-            {{ data.shippingDetails.state }}, {{ data.shippingDetails.pincode }}
-          </p>
+          <p><strong>Shipping Address:</strong> {{data.shippingDetails.name}}</p>
+          <p>{{data.shippingDetails.address}}, {{data.shippingDetails.city}}</p>
+          <p>{{data.shippingDetails.state}}, {{data.shippingDetails.pincode}}</p>
           <p>IN</p>
-          <p>
-            <strong>State/UT Code:</strong>
-            {{ data.shippingDetails.stateUTCode }}
-          </p>
+          <p><strong>State/UT Code:</strong> {{data.shippingDetails.stateUTCode}}</p>
         </div>
         <div class="place-details">
-          <p><strong>Place of Supply:</strong> {{ data.placeOfSupply }}</p>
-          <p><strong>Place of Delivery:</strong> {{ data.placeOfDelivery }}</p>
+          <p><strong>Place of Supply:</strong> {{data.placeOfSupply}}</p>
+          <p><strong>Place of Delivery:</strong> {{data.placeOfDelivery}}</p>
+        <p><strong>Invoice Number:</strong> {{data.invoiceDetails.invoiceNo}}</p>
+        <p><strong>Invoice Date:</strong> {{data.invoiceDetails.invoiceDate}}</p>
         </div>
       </div>
 
       <!-- Order and Invoice Details -->
       <div class="order-details">
-        <p><strong>Order Number:</strong> {{ data.orderDetails.orderNo }}</p>
-        <p><strong>Order Date:</strong> {{ data.orderDetails.orderDate }}</p>
-        <p>
-          <strong>Invoice Number:</strong> {{ data.invoiceDetails.invoiceNo }}
-        </p>
-        <p>
-          <strong>Invoice Date:</strong> {{ data.invoiceDetails.invoiceDate }}
-        </p>
+        <p><strong>Order Number:</strong> {{data.orderDetails.orderNo}}</p>
+        <p><strong>Order Date:</strong> {{data.orderDetails.orderDate}}</p>
       </div>
 
       <!-- Item Table -->
@@ -182,15 +201,15 @@
           {{#each data.itemDetails}}
           <tr>
             <td>{{@index}}</td>
-            <td>{{ description }}</td>
-            <td>{{ unitPrice }}</td>
-            <td>{{ quantity }}</td>
-            <td>{{ discount }}</td>
-            <td>{{ netAmount }}</td>
+            <td>{{description}}</td>
+            <td>{{unitPrice}}</td>
+            <td>{{quantity}}</td>
+            <td>{{discount}}</td>
+            <td>{{netAmount}}</td>
             <td>{{../taxRate}}%</td>
-            <td>{{ taxType }}</td>
-            <td>{{ taxAmount }}</td>
-            <td>{{ totalAmount }}</td>
+            <td>{{taxType}}</td>
+            <td>{{taxAmount}}</td>
+            <td>{{totalAmount}}</td>
           </tr>
           {{/each}}
         </tbody>
@@ -198,21 +217,16 @@
 
       <!-- Total Amount Section -->
       <div class="totals">
-        <p><strong>Total Net Amount:</strong> ₹{{ totalNetAmount }}</p>
-        <p><strong>Total Tax Amount:</strong> ₹{{ totalTaxAmount }}</p>
-        <p><strong>Total:</strong> ₹{{ totalAmount }}</p>
-        <p><strong>Amount in Words:</strong> {{ totalAmount }} only</p>
+        <p><strong>Total Net Amount:</strong> ₹{{totalNetAmount}}</p>
+        <p><strong>Total Tax Amount:</strong> ₹{{totalTaxAmount}}</p>
+        <p><strong>Total:</strong> ₹{{totalAmount}}</p>
+        <p><strong>Amount in Words:</strong> {{totalAmount}} only</p>
       </div>
 
       <!-- Footer Section -->
       <div class="footer">
-        <p>
-          <strong
-            >Whether tax is payable under reverse charge -
-            {{#if data.reverseCharge}}Yes{{else}}No{{/if}}</strong
-          >
-        </p>
-        <p>For {{ data.sellerDetails.name }}</p>
+        <p><strong>Whether tax is payable under reverse charge - {{#if data.reverseCharge}}Yes{{else}}No{{/if}}</strong></p>
+        <p>For {{data.sellerDetails.name}}</p>
         <p class="authorized-signatory">Authorized Signatory</p>
       </div>
     </div>
